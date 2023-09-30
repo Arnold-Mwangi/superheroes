@@ -3,7 +3,7 @@
 from flask import Flask, make_response, jsonify
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from instance.helpers import heroes, heroes_by_id
+from instance.helpers import heroes, heroes_by_id, powers, patch_power_by_id, powers_by_id, post_hero
 
 from models import db, Hero, Power, HeroPower
 
@@ -36,8 +36,32 @@ class HeroesById(Resource):
         hero_response = heroes_by_id.heroes_by_id(id, app)
         return hero_response
 
+class PowersEndpoint(Resource):
+    def get(self):
+        all_powers, status_code = powers.powers()
+        return make_response(all_powers, status_code)
+
+
+class PowersById(Resource):
+    def get(self, id):
+        hero_response = powers_by_id.powers_by_id(id, app)
+        return hero_response
+
+    def patch(self, id):
+        patch_response = patch_power_by_id.patch_power(id, app)
+        return patch_response
+
+
+class HeroPowersEndPoint(Resource):
+    def post(self):
+        post_response = post_hero.post_hero_power(app)
+        return post_response
+
+api.add_resource(HeroPowersEndPoint, '/heropower')
 api.add_resource(HeroesEndpoint, '/heroes')
 api.add_resource(HeroesById, '/heroes/<int:id>')
+api.add_resource(PowersEndpoint, '/powers')
+api.add_resource(PowersById, '/powers/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555)
