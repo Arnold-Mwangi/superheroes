@@ -3,6 +3,7 @@
 from flask import Flask, make_response, jsonify
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from instance.helpers import heroes, heroes_by_id
 
 from models import db, Hero, Power, HeroPower
 
@@ -23,32 +24,17 @@ def home():
     return make_response(jsonify(response_body), 200)
 
 # GET /heroes
-class HeroesEndpoint(Resource):
-    
+class HeroesEndpoint(Resource):    
     def get(self):
-        try:
-
-            all_heroes = [hero.to_dict() for hero in Hero.query.all()]
-            return make_response(all_heroes, 200)
-        except Exception as e:
-            app.logger.error(f"Error in HeroesEndpoint: {str(e)}")
-            return make_response({"error": "Serialization error"}, 500)
+        all_heroes, status_code = heroes.heroes()
+        return make_response(all_heroes, status_code)
+        
 
 # GET /heroes/:id
 class HeroesById(Resource):
-
     def get(self, id):
-        try:
-            hero = Hero.query.filter_by(id=id).first()
-            if hero:
-                hero_data = hero.to_dict()
-                return make_response(hero, 200)
-            else:
-                response_body = {"Error": "Power Id not Available"}
-                return make_response(response_body, 500)
-        except Exception as e:
-            app.logger.error(f"Error in HeroesBYiD: {str(e)}")
-            return make_response({"error":"Serialization Error"}, 500)
+        hero_response = heroes_by_id.heroes_by_id(id, app)
+        return hero_response
 
 api.add_resource(HeroesEndpoint, '/heroes')
 api.add_resource(HeroesById, '/heroes/<int:id>')
