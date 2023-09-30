@@ -3,7 +3,7 @@
 from flask import Flask, make_response, jsonify
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from instance.helpers import heroes, heroes_by_id, powers, patch_power_by_id, powers_by_id, post_hero
+from instance.helpers import heroes, heroes_by_id, powers, patch_power_by_id, powers_by_id, post_hero_power
 
 from models import db, Hero, Power, HeroPower
 
