@@ -12,10 +12,49 @@ db =SQLAlchemy(metadata = metadata)
 db = SQLAlchemy()
 
 class Hero(db.Model, SerializerMixin):
-    __tablename__ = 'hero'
+    __tablename__ = 'heroes'
+
+    serialize_rules = ('-powers.hero',)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.column(db.String)
-    strength = db.column(db.String)
+    super_name = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default = db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-# add any models you may need. 
+    powers = db.relationship('HeroPower', back_populates = 'hero')
+
+    @validates('super_name')
+    def validate_strength(self, key, value):
+        if value not in ['Strong', 'Weak', 'Average']:
+            raise ValueError("Strength must be either one of the following:  'Strong', 'Weak', 'Average'")
+        return value
+
+class HeroPower(db.Model, SerializerMixin):
+    __tablename__ = 'hero-powers'
+
+
+    serialize_rules = ('-hero.powers', '-power.heroes')
+
+    id = db.Column(db.Integer, primary_key = True)
+    Strength = db.column(db.String)
+    hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
+    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
+    created_at = db.Column(db.DateTime, server_default = db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    hero = db.relationship('Hero', back_populates='powers')
+    power = db.relationship('Power', back_populates='heroes')
+
+class Powers(db.Model, SerializerMixin):
+    __tablename__ = 'powers'
+    
+    serialize_rules = ('-heroes.power')
+
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.column(db.String)
+    description = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default = db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    heroes = db.relationship('HeroPower', back_populates='power')
