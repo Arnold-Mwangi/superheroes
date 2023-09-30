@@ -51,7 +51,7 @@ class HeroPower(db.Model, SerializerMixin):
 class Power(db.Model, SerializerMixin):
     __tablename__ = 'powers'
     
-    serialize_rules = ('-heroes.power')
+    serialize_rules = ('-heroes.power',)
 
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String)
