@@ -7,6 +7,7 @@ Flask
 Flask-Migrate
 Flask-RESTful
 Flask-SQLAlchemy
+flask_swagger_ui  # Add this line
 greenlet
 importlib-metadata
 importlib-resources
