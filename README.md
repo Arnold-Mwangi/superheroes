@@ -50,7 +50,7 @@ Depending on your preference, you can either check your progress by:
 ## Models
 
 You need to create the following relationships:
-
+value
 - A `Hero` has many `Power`s through `HeroPower`
 - A `Power` has many `Hero`s through `HeroPower`
 - A `HeroPower` belongs to a `Hero` and belongs to a `Power`

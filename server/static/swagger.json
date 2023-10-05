@@ -1,0 +1,344 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "description": "SuperHeroes Api",
+        "version": "1.0.0",
+        "title": "SuperHeroes Restful Api",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/license/MIT"
+        }
+    },
+    "tags": [
+        {
+            "name": "SuperHeroes",
+            "description": "Test API"
+        }
+    ],
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "Hero": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "super_name": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "HeroPower": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "strength": {
+                        "type": "string",
+                        "enum": [
+                            "Strong",
+                            "Weak",
+                            "Average"
+                        ]
+                    },
+                    "hero_id": {
+                        "type": "integer"
+                    },
+                    "power_id": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Power": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Get the welcome message",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Welcome message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        },
+        "/heroes": {
+            "get": {
+                "summary": "Get a list of all heroes",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Hero"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        },
+        "/heroes/{id}": {
+            "get": {
+                "summary": "Get a hero by ID",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the hero",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Hero"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Hero not found"
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        },
+        "/powers": {
+            "get": {
+                "summary": "Get a list of all powers",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Power"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        },
+        "/powers/{id}": {
+            "get": {
+                "summary": "Get a power by ID",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the power",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Power"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Power not found"
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update a power by ID",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the power",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Power"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Power updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Power"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Power not found"
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        },
+        "/heropower": {
+            "post": {
+                "summary": "Create a new hero power",
+                "tags": [
+                    "SuperHeroes"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HeroPower"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hero power created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HeroPower"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Hero or power not found"
+                    },
+                    "500": {
+                        "description": "Serialization error"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
 
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response, jsonify, redirect
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from instance.helpers import heroes, heroes_by_id, powers, patch_power_by_id, powers_by_id, post_hero_power
+from instance.helpers import heroes, heroes_by_id, powers, patch_power_by_id, powers_by_id, post_hero
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from models import db, Hero, Power, HeroPower
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///heroes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config = {
+        'app_name': "SuperHeroes Api"
+    }
+)
+
+app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix = SWAGGER_URL)
 
 migrate = Migrate(app, db)
 
@@ -21,7 +34,7 @@ def home():
     response_body = {
         "Message": "Welcome to the world of heroes"
     }
-    return make_response(jsonify(response_body), 200)
+    return redirect(SWAGGER_URL), 200
 
 # GET /heroes
 class HeroesEndpoint(Resource):    
